@@ -45,6 +45,28 @@ def create():
     db.session.commit()
     return redirect('/')
 
+@app.route('/delete/<int:id>')
+def delete(id):
+	if 'user_id' not in session:
+		return redirect('/login')
+
+	contacts = Contacts.query.filter_by(id=id).filter_by(user_id=session['user_id']).first()
+	db.session.delete(contacts)
+	db.session.commit()
+	return redirect('/')
+
+@app.route('/update/<int:id>', methods=['POST'])
+def update(id):
+	name = request.form.get('name')
+	email = request.form.get('email')
+	phone = request.form.get('phone')
+	contacts = Contacts.query.filter_by(id=id).first()
+	contacts.name = name
+	contacts.email = email
+	contacts.phone = phone
+	db.session.commit()
+	return redirect('/')
+
 if __name__ == '__main__':
     db.create_all()
     app.run(host='0.0.0.0')

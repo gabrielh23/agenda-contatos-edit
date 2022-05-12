@@ -47,10 +47,8 @@ def create():
 
 @app.route('/delete/<int:id>')
 def delete(id):
-	if 'user_id' not in session:
-		return redirect('/login')
 
-	contacts = Contacts.query.filter_by(id=id).filter_by(user_id=session['user_id']).first()
+	contacts = Contacts.query.filter_by(id=id).first()
 	db.session.delete(contacts)
 	db.session.commit()
 	return redirect('/')
